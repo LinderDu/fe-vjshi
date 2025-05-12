@@ -1,4 +1,3 @@
-import { videos } from "@/lib/MockVideosCard.json";
 import {
   getBuyerCartFotos,
   getBuyerCartMusics,
@@ -17,7 +16,12 @@ export type CartState = {
 };
 
 export type CartActions = {
+  // 初始化统一购物车数据
   initCart: () => Promise<void>;
+  // 分开请求方便后续添加购物车类型后更新
+  fetchCartVideos: () => Promise<void>;
+  fetchCartFotos: () => Promise<void>;
+  fetchCartMusics: () => Promise<void>;
   setCartTotal: () => void;
   setOpenCartDrawer: () => void;
   setCloseCartDrawer: () => void;
@@ -40,11 +44,11 @@ const initialState: CartState = {
 /**
  *
  * @description 购物车状态管理
- *
+ * 通过store管理购物车状态应对以下场景
  * 全局化
  * 打开场景的多样化
  * 购物车数据的多样化处理
- *
+ * 核心逻辑管理唯一性
  */
 
 const useCartStore = create<CartState & CartActions>()(
@@ -53,11 +57,23 @@ const useCartStore = create<CartState & CartActions>()(
       return {
         ...initialState,
         initCart: async () => {
-          const videos: IVideoCart[] = await getBuyerCartVideos();
+          get().fetchCartVideos();
+          get().fetchCartFotos();
+          get().fetchCartMusics();
+        },
+        fetchCartFotos: async () => {
           const potos: IFotoCart[] = await getBuyerCartFotos();
+          set({ potos: potos });
+          get().setCartTotal();
+        },
+        fetchCartVideos: async () => {
+          const videos: IVideoCart[] = await getBuyerCartVideos();
+          set({ videos: videos });
+          get().setCartTotal();
+        },
+        fetchCartMusics: async () => {
           const musics: IMusicCart[] = await getBuyerCartMusics();
-
-          set({ videos: videos, potos: potos, musics: musics });
+          set({ musics: musics });
           get().setCartTotal();
         },
         setCartTotal: () => {

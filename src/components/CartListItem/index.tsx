@@ -38,7 +38,6 @@ export default function CartListItem(props: CartListItemProps) {
   };
 
   const imageLoader = ({ src }: ImageLoaderProps) => {
-    console.log("imageLoader", src);
     return src;
   };
 

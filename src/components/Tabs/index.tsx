@@ -15,6 +15,7 @@ interface TabsProps {
   tabClassName?: string;
   sliderClassName?: string;
   tabWrapClassName?: string;
+  // 基础组件定义函数更高的灵活性
   children?: (tab: TabItem) => React.ReactNode;
 }
 
@@ -32,7 +33,7 @@ const Tabs: React.FC<TabsProps> = ({
   const [tabWidths, setTabWidths] = useState<number[]>([]);
   const [tabOffsets, setTabOffsets] = useState<number[]>([]);
 
-  // 计算每个 tab 的宽度以及每个 tab 的偏移量（包括 margin）
+  // 动态计算每个 tab 的宽度以及每个 tab 的偏移量（包括 margin），后续扩展有滚动需求
   const updateTabWidthsAndOffsets = () => {
     const widths = tabRefs.current.map((tab) => {
       if (tab) {

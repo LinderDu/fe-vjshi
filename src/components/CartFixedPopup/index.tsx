@@ -5,7 +5,7 @@ import useCartStore from "@/stores/cartStore";
 import { useEffect } from "react";
 import Show from "../Show";
 
-export default function Cart() {
+export default function CartFixedPopup() {
   const { setOpenCartDrawer, cartTotal, initCart } = useCartStore();
 
   const handleOpen = () => {
@@ -13,6 +13,7 @@ export default function Cart() {
   };
 
   useEffect(() => {
+    // 在cart组件加载时初始化购物车数据，不阻塞主线程
     initCart();
   }, []);
 

@@ -63,12 +63,21 @@ function TabContent(props: TabContentProps) {
     }
   };
 
-  const totalPrice = useMemo(() => {
-    if (selectSkuList.length === 0) return 0;
-    return selectSkuList.reduce((total, item) => {
-      const price = item.price || 0;
-      return total + price;
-    }, 0);
+  type ICartLog = { ids: number[]; total: number };
+
+  const cartLog: ICartLog = useMemo(() => {
+    if (selectSkuList.length === 0) return { ids: [], total: 0 };
+    return selectSkuList.reduce<ICartLog>(
+      (pre, item) => {
+        const price = item.price || 0;
+        const total = pre.total + price;
+        return {
+          ids: [...pre.ids, item.vid],
+          total,
+        };
+      },
+      { ids: [], total: 0 }
+    );
   }, [selectSkuList]);
 
   return (
@@ -97,12 +106,16 @@ function TabContent(props: TabContentProps) {
       <hr className="border-0 border-b w-full h-[0px] border-current text-[#F0F0F0]" />
       <Footer
         disabled={selectSkuList.length <= 0}
-        totalPrice={totalPrice}
+        totalPrice={cartLog.total}
         onCheckAll={(chcked) => {
           handleCheckAll(chcked);
         }}
         onSubmit={() => {
-          console.log("购买总价:", totalPrice);
+          // console.log("购买总价:", totalPrice);
+          const logs = [
+            { ids: cartLog.ids.join("、"), 总价: cartLog.total, 业务: from },
+          ];
+          console.table(logs);
         }}
       />
     </div>

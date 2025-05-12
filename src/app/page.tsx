@@ -1,5 +1,5 @@
 import Tabs from "@/components/HomeTypeTabs";
-import Cart from "@/components/Cart";
+import Cart from "@/components/CartFixedPopup";
 import CartDrawer from "@/components/CartDrawer";
 
 export default function Home() {
