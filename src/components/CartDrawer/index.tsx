@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image, { ImageLoaderProps } from "next/image";
 import Drawer, { type DrawerProps } from "@/components/Drawer";
 import CheckBox from "@/components/CheckBox";
 import Tabs from "@/components/Tabs";
@@ -7,8 +7,14 @@ import CartListItem, {
   type CartListItemProps,
 } from "@/components/CartListItem";
 import useCartStore from "@/stores/cartStore";
-import { IMusicCart, IFotoCart, IVideoCart, ICart } from "@/types/cartMod";
-import { useEffect, useMemo, useState } from "react";
+import {
+  IMusicCart,
+  IFotoCart,
+  IVideoCart,
+  ICart,
+  ICartFrom,
+} from "@/types/cartMod";
+import { useMemo, useState } from "react";
 
 type CartDrawerProps = Pick<DrawerProps, "open" | "onClose">;
 
@@ -66,24 +72,26 @@ function TabContent(props: TabContentProps) {
   }, [selectSkuList]);
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="flex flex-col h-full">
-        <div className="flex-1 flex flex-col w-full overflow-auto pt-5 px-5">
-          {data.map((item) => {
-            return (
-              <CartListItem
-                data={item}
-                selected={
-                  selectAll || selectSkuList.some((i) => i.vid === item.vid)
-                }
-                key={item.vid}
-                from={from}
-                onSelect={(checked) => {
-                  handleSelect(checked, item);
-                }}
-              />
-            );
-          })}
+    <div className="flex flex-1 flex-col">
+      <div className="flex flex-col flex-1 overflow-hidden">
+        <div className=" w-full h-full overflow-hidden relative">
+          <div className="flex flex-col w-full h-full pt-5 px-5 overflow-y-auto absolute top-0 left-0">
+            {data.map((item) => {
+              return (
+                <CartListItem
+                  data={item}
+                  selected={
+                    selectAll || selectSkuList.some((i) => i.vid === item.vid)
+                  }
+                  key={item.vid}
+                  from={from}
+                  onSelect={(checked) => {
+                    handleSelect(checked, item);
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
       <hr className="border-0 border-b w-full h-[0px] border-current text-[#F0F0F0]" />
@@ -94,7 +102,7 @@ function TabContent(props: TabContentProps) {
           handleCheckAll(chcked);
         }}
         onSubmit={() => {
-          console.log("submit");
+          console.log("购买总价:", totalPrice);
         }}
       />
     </div>
@@ -103,26 +111,41 @@ function TabContent(props: TabContentProps) {
 
 function CartDrawerContent(props: CartDrawerProps) {
   const { videos, potos, musics } = useCartStore();
-  const tabsData = [
+  const tabsData: {
+    label: string;
+    from: ICartFrom;
+    data: IVideoCart[] | IFotoCart[] | IMusicCart[];
+  }[] = [
     {
       label: `视频 ${videos.length}`,
-      content: <TabContent data={videos} from="video" />,
+      from: "video",
+      data: videos,
     },
     {
       label: `图片 ${potos.length}`,
-      content: <TabContent data={potos} from="foto" />,
+      from: "foto",
+      data: potos,
     },
     {
       label: `音乐 ${musics.length}`,
-      content: <TabContent data={musics} from="music" />,
+      from: "music",
+      data: musics,
     },
   ];
 
   return (
     <div className="flex flex-col h-full">
       <Head onClose={props.onClose} />
-      <div className="flex flex-col items-center flex-1 overflow-auto px-0">
-        <Tabs tabs={tabsData} tabWrapClassName="mx-10" />
+      <div className="flex flex-col items-center flex-1 px-0">
+        <Tabs tabs={tabsData} tabWrapClassName="mx-10">
+          {(tab) => (
+            <TabContent
+              from={tab.from as ICartFrom}
+              data={tab.data}
+              key={tab.from}
+            />
+          )}
+        </Tabs>
       </div>
     </div>
   );

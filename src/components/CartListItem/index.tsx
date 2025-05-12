@@ -1,13 +1,19 @@
-import Image from "next/image";
+import Image, { ImageLoaderProps } from "next/image";
 import CheckBox from "@/components/CheckBox";
-import { IFotoCart, IVideoCart, IMusicCart, ICart } from "@/types/cartMod";
+import {
+  IFotoCart,
+  IVideoCart,
+  IMusicCart,
+  ICart,
+  ICartFrom,
+} from "@/types/cartMod";
 import Show from "../Show";
 import useCartStore from "@/stores/cartStore";
 import { LIIC_TYPE_LABEL } from "@/constants/cart";
 
 export interface CartListItemProps {
   data: IVideoCart | IFotoCart | IMusicCart;
-  from: "video" | "foto" | "music";
+  from: ICartFrom;
   selected?: boolean;
   onSelect: (checked: boolean, item: ICart) => void;
 }
@@ -29,6 +35,11 @@ export default function CartListItem(props: CartListItemProps) {
         setDeleteMusicById(vid);
         break;
     }
+  };
+
+  const imageLoader = ({ src }: ImageLoaderProps) => {
+    console.log("imageLoader", src);
+    return src;
   };
 
   return (
@@ -53,6 +64,7 @@ export default function CartListItem(props: CartListItemProps) {
                 objectFit="cover"
                 width={117}
                 height={66}
+                loader={imageLoader}
               />
             </a>
           </div>

@@ -41,6 +41,17 @@ function Drawer(props: DrawerProps) {
     }
   }, [closeOnEscapeKey]);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const style: CSSProperties = { zIndex: zIndex, maxWidth: `${width}px` };
   if (backgroundColor) {
     style["backgroundColor"] = backgroundColor;

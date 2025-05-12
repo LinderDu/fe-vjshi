@@ -1,9 +1,11 @@
+import { IFotoCart, IMusicCart, IVideoCart } from "@/types/cartMod";
 import clsx from "clsx";
-import React, { useState, useRef, useEffect, JSX } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface TabItem {
   label: string;
-  content: string | JSX.Element;
+  from: string;
+  data: IFotoCart[] | IMusicCart[] | IVideoCart[];
 }
 
 interface TabsProps {
@@ -13,6 +15,7 @@ interface TabsProps {
   tabClassName?: string;
   sliderClassName?: string;
   tabWrapClassName?: string;
+  children?: (tab: TabItem) => React.ReactNode;
 }
 
 const Tabs: React.FC<TabsProps> = ({
@@ -22,6 +25,7 @@ const Tabs: React.FC<TabsProps> = ({
   tabClassName = "",
   sliderClassName = "",
   tabWrapClassName = "",
+  children = () => <></>,
 }) => {
   const [selectedTab, setSelectedTab] = useState(defaultSelectedIndex);
   const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -104,7 +108,7 @@ const Tabs: React.FC<TabsProps> = ({
       </div>
 
       <div className="mt-4 flex-1 flex flex-col">
-        {tabs[selectedTab].content}
+        {children(tabs[selectedTab])}
       </div>
     </div>
   );

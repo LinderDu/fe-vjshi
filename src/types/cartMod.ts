@@ -1,3 +1,4 @@
+import { ICart } from "@/types/cartMod";
 import { ILlicType } from "./commonMod";
 
 export interface ICart {
@@ -16,5 +17,7 @@ export interface IVideoCart extends ICart {
 export interface IFotoCart extends ICart {
   softwareType: "图片素材" | "AI模板" | "PSD模版"; // 类型​11
 }
+
+export type ICartFrom = "video" | "foto" | "music";
 
 export type IMusicCart = ICart;

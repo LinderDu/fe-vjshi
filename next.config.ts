@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     domains: ["pic.vjshi.com", "pp.vjshi.com", "ma.vjshi.com"],
-    formats: ["image/webp"],
+    // formats: ["image/webp"],
   },
 };
 
