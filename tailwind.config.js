@@ -8,9 +8,6 @@ module.exports = {
   },
   variants: {
     extend: {
-      backgroundColor: ["data-selected"],
-      textColor: ["data-selected"],
-      fontWeight: ["data-selected"],
     },
   },
   plugins: [],
