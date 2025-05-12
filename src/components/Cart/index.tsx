@@ -21,7 +21,9 @@ export default function Cart() {
       <div className="absolute right-0 bottom-25 pr-3">
         <div
           className="justify-center items-center flex w-[54px] h-[54px] rounded-[100%] bg-white p-[1px] cursor-pointer shadow-lg group"
-          onClick={handleOpen}
+          onClick={() => {
+            handleOpen();
+          }}
         >
           <div className="justify-center items-center group-hover:bg-neutral-300 transition-background flex w-full h-full rounded-[100%]">
             <div className="relative inline-flex">
